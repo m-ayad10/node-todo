@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deployment
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: simple
+  template:
+    metadata:
+      labels:
+        app: simple
+    spec: 
+      containers:
+        - name: simple-todo
+          image: mohammedayad10/node-simple:latest
+          ports:
+            - containerPort: 3000
+          env: 
+            - name: PORT
+              valueFrom: 
+                configMapKeyRef:
+                  name: node-credentials
+                  key: port
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: node-credentials
+                  key: mongodb_url
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-cluster
+spec:
+  selector:
+    app: simple
+  ports: 
+    - name: node-cluster
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP

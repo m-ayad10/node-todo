@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-credentials
+data:
+  port: "3000"
+  mongodb_url: "mongodb://mongo-service.default.svc.cluster.local:27017/myApp"
