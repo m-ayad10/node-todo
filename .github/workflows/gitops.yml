@@ -32,14 +32,14 @@ jobs:
           push: true
           tags: mohammedayad10/node-todo:${{github.sha}}
       -
-        name: git clone
+        name: Update deployment in Gitops repo
         run: |
           mkdir Gitops
           cd Gitops
-          git clone https://github.com/m-ayad10/Gitops.git .
+          git clone https://x-access-token:${{ secrets.REPO_B_PAT }}@github.com/m-ayad10/Gitops.git .
 
           cd node-todo
-          
+
           echo "before change"
           cat node-deployment.yml
           sed -i "s|image: mohammedayad10/node-todo:.*|image: mohammedayad10/node-todo:${{ github.sha }}|g" node-deployment.yml
@@ -47,7 +47,7 @@ jobs:
           cat node-deployment.yml
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          
+
           git add .
           git commit -m "Update image tag to ${{github.sha}} in node-todo"
           git push origin main
