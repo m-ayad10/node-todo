@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      -
+        name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: mohammedayad10/node-todo:${{github.sha}}
+      -
+        name: git clone
+        run: |
+          git clone https://github.com/m-ayad10/Gitops.git .
+
+          cd node-todo
+
+          sed -i "s|image: mohammedayad10/node-todo:.*|image: mohammedayad10/node-todo:${{ github.sha }}|g" node-deployment.yml
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add .
+          git commit -m "Update image tag to ${{github.sha}} in node-todo"
+          git push origin main
