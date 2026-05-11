@@ -39,12 +39,15 @@ jobs:
           git clone https://github.com/m-ayad10/Gitops.git .
 
           cd node-todo
-
+          
+          echo "before change"
+          cat node-deployment.yml
           sed -i "s|image: mohammedayad10/node-todo:.*|image: mohammedayad10/node-todo:${{ github.sha }}|g" node-deployment.yml
-
+          echo "after change"
+          cat node-deployment.yml
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
+          
           git add .
           git commit -m "Update image tag to ${{github.sha}} in node-todo"
           git push origin main
