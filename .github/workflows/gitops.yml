@@ -34,7 +34,7 @@ jobs:
       -
         name: git clone
         run: |
-          mkidir Gitops
+          mkdir Gitops
           cd Gitops
           git clone https://github.com/m-ayad10/Gitops.git .
 
