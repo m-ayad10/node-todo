@@ -46,6 +46,7 @@ app.get('/check',(req:Request,res:Response)=>{
     }
 })
 
+console.log("Changed the file")
 app.get('/ayad', (req:Request,res:Response)=>{
     try {
         res.status(200).json({message:"ayad"})
