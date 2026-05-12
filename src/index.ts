@@ -45,3 +45,11 @@ app.get('/check',(req:Request,res:Response)=>{
         res.status(500).json({message:'Internal server error'})
     }
 })
+
+app.get('/ayad', (req:Request,res:Response)=>{
+    try {
+        res.status(200).json({message:"ayad"})
+    } catch (error) {
+        res.status(500).json({message:'Internal server error'})
+    }
+})
